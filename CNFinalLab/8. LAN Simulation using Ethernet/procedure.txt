@@ -1,0 +1,62 @@
+AIM:
+To simulate a LAN based on Ethernet with a min of 10 nodes and examine the performance under different load scenarios.
+
+PROCEDURE:
+    1. Create a new project - Open Riverbed, Select Project, New Project (name: project_Ethernet), scenario: Coax_2
+       Span LANs to a few thousand metres
+       Startup Wizard: Empty scenario, Office in Network Scale list, X=200 Y=100
+       Finish
+
+    2. Topology -> Rapid Configuration -> Select Bus -> Select next
+       Inside the Rapid Configuration module:
+        1. Select models - ethcoax
+        2. Return to the module - Now Select
+            Node model - ethcoax_station
+            Link model - eth_coax
+            Number - 5
+            Tap Model - eth_tap
+            Head of bus: X - 20, Y - 50
+            Size: X - 170, Y - 20
+        3. Finish up
+
+    3. Now to configure the coaxial cable
+        1. Right click on the horizontal link -> Select Edit Attributes. The attributes module will open up
+        2. Select model name (eth_coax), right click and select 'Edit'.
+        3. In the choose bus link model - Choose eth_coax_adv from eth_coax_adv.
+        4. Now select advanced to view the entire list of configurations for the bus.
+        5. Now, change these attributes: thickness to 5, delay to 0.05
+
+        Click ok, now the coaxial cable should have thickened, now save the project
+
+    4. Now to configure the nodes
+        1. Click on any node, then select 'Select similar nodes', then select 'Edit Attributes'
+        2. Expand Traffic Generation Parameters - Now change ON time to exponential(100), OFF time to exponential(0.00001)
+        3. Now expand Packet Generation Arguments - Change Interarrival time to exponential(2) and Packet Size to constant(1024)
+        4. Make sure "Apply to selected objects" is selected, then click Ok.
+    
+    5. Now to choose the statistics
+        1. Right click on project space, click 'Individual DES statistics' then expand 'Global Statistics'
+        2. Expand 'Traffic Sink', then select 'Traffic Received (packets/sec)'.
+        3. Expand 'Traffic Source', then select 'Traffic Sent (packets/sec)'.
+
+    6. Now to choose average of those statistics as a scalar value
+        1. From DES -> Choose Statistics(Advanced). Traffic sent and received should appear outward.
+        2. Right click on sent(or received), then set scalar data to 'enabled' and type attribute to 'time average'
+        3. Click on 'save' and return to window, then again 'save'.
+
+    7. Now to run the simulation
+        1. Click on the dude running symbol (Run), and then select 30 seconds in Duration. Run the simulation (Now exp(2) time sim has been finished)
+        2. After it finishes, save the file, and now select scenarios -> duplicate scenarios.
+        3. For the scenarios named aptly to Interarrival times as exponentials: 0.025,0.03,0.035,0.05,0.1,0.25,0.5,1, change the appropriate nodes by selecting
+           "Select similar nodes" then change the Interarrival time to exp(as such).
+        4. Make sure to save everytime.
+
+    8. View the Results:
+        1. Right click on Project Space -> View Results
+        2. Go to DES Parametric Studies
+        3. From Results -> Results for Current Project
+        4. Uncheck 'Include vectors'
+        5. Uncheck 'coax_0-025'
+        6. Expand Scalar Statistics -> Traffic Sink -> Traffic Received as Set to Y axis
+           Traffic Source -> Traffic Sent as Set to X axis
+        7. You'll be getting a linear graph. That's it.

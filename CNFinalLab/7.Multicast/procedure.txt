@@ -1,0 +1,66 @@
+1. Setup multicast address and port
+    - Choose a multicast group address [range 224.0.0.0 - 239.255.255.255]
+    - Select a port number to use in communication
+
+    private static final String MULTICAST_GROUP_ID="224.0.0.1";
+    private static final int port=8888;
+
+2. Create a mulitcast socket
+    - Create a multicast object and bind it to the port
+    - Join the group using 'joinGroup()' method, passing the multicast group address
+
+    InetAddress group=InetAddress.getByName(MULTICAST_GROUP_ID);
+    MulticastSocket socket=new MulticastSocket(port);
+    socket.joinGroup(group);
+
+3. Sending the messages
+    - Prompt the user to send the message 
+    - Receive the message from user as String, convert it into a byte array
+    - Create a datagram with the arguments as the byte array,length of array, multicast group ip and port
+    - Send the datagram using 'send()'.
+
+    Thread senderThread=new Thread(() -> {
+        try{
+            Scanner sc=new Scanner(System.in);
+            while(true){
+              System.out.print("Enter message: ");
+              String message=sc.nextLine();
+              byte[] array=messge.getBytes();
+              DatagramPacket packet=new DatagramPacket(array,array.length,group,PORT);
+              socket.send(packet);
+        }
+    }
+    catch(IOException e){
+        e.printStacktrace();
+    }
+    });
+
+4. Receive the messages
+    - Create a byte array to hold the message from the incoming datagram
+    - Create a datagram packet to hold the incoming datagram
+    - Use 'receive()' to receive the datagram
+    - Extract the data (using getData()) and display the message to the user
+
+    Thread receiverThread=new Thread(() -> {
+        try{
+            byte[] array=new byte[1024];
+            DatagramPacket packet=new DatagramPacket(array,array.length);
+            while(true){
+                socket.receive(packet);
+                String receivedMessage=new String(packet.getData,0,packet.getLength());
+                System.out.println("Received:"+receivedMessage);
+            }
+        }
+        catch(IOException e){
+        e.printStacktrace();
+    }
+    });
+
+5. Start the threads: senderThread.start();receiverThread.start();
+
+6. Check all these imports
+    java.io.IOException
+    java.net.DatagramPacket
+    java.net.InetAddress
+    java.net.MulticastSocket
+    java.util.Scanner

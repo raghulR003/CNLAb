@@ -1,0 +1,48 @@
+1. New -> Project Name: project_SwitchedLAN and type: OnlyHub. Finish the module setup. Close the object module.
+
+2. Rapid Configuration -> Star -> Select models: ethernet and click ok.
+    1. Center model name: ethernet16_hub and Periphery Node model: ethernet_station
+    2. Link model: 10BaseT
+    3. Number=16
+    4. X=Y=50 and Radius=42
+
+    Click ok.
+
+3. Configure the nodes
+    1. Select a node, and click 'Select similar nodes'
+    2. Expand Traffic Generation Parameters
+        ON state time - exp(100)
+        OFF state time - exp(0.00001)
+        Packet Generation Arguments:
+            Interarrival time - exp(0.02)
+    3. Save everything
+
+4. Choose Statistics:
+    1. Right click on project workspace -> Click Choose Individual DES statistics
+    2. Choose from Ethernet: Delay, Traffic Sink: Traffic Received, Traffic Source: Traffic Sent,Node Statistics -> Ethernet: Collision Count
+    3. Save the file
+
+5. Run the simulation:
+    1. Click the running dude
+    2. Set to 2 minutes
+    3. Run the simulation, and save the file.
+
+Until now, only a simuation that connects 16 stations to a single hub is done. We need to use a switch next.
+
+6. Duplicate the scenario.
+7. Open object palatte -> Select and place: ethernet16_hub and ethernet16_switch (already one hub is present)
+8. Delete all links, then place the switch->hub->switch in the middle of the stations, then create new connections using 10BaseT link from Object palatte.
+9. Save the file.
+
+10. Run the simulation (the same 2 minutes)
+
+11. Now to view the results:
+    1. DES -> Results -> Compare Results
+    2. In Presentation, change from 'As Is' to 'time_average'
+    3. Results for: Current Project and then select OnlyHub and OnlyHub1 (it should be HubAndSwitch tho) 
+    4. Expand everything in Global Statistics. Also, expand in Object Statistics -> Office Network -> Hub 1 -> Ethernet
+    5. Select Traffic Sent alone now. A graph shows up (the traffic sent in both scenarios is almost identical)
+    6. Unselect Sent and select Received now. A graph shows up, where the traffic received with the second scenario, HubAndSwitch, is higher than that of the OnlyHub scenario.
+    7. Click the delay next. Unselect and select everything now to see a 4-coloured graph.
+
+Colour colour aah paakurathu thaa matter uh. Bye bye.
